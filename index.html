@@ -176,10 +176,86 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 .tombol:active{transform:translateY(3px);box-shadow:none}
 .tombol.polos{background:#fff;color:var(--ink);box-shadow:0 3px 0 #b7c2e0}
 
+/* ---------- STYLING TAMBAHAN FITUR MUSIK ---------- */
+#music-container {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 9999;
+}
+#music-btn {
+  background: var(--gold);
+  color: var(--navy);
+  border: 2px solid var(--navy);
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.2s;
+}
+#music-btn:hover {
+  transform: scale(1.05);
+}
+#music-menu {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  background: var(--paper);
+  border: 2px solid var(--navy);
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+  width: 170px;
+  text-align: left;
+}
+#music-menu.menu-hidden {
+  display: none;
+}
+#music-menu p {
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  border-bottom: 1px dashed var(--navy);
+  padding-bottom: 4px;
+}
+#music-menu button {
+  display: block;
+  width: 100%;
+  padding: 6px 8px;
+  margin-bottom: 5px;
+  background: #fff;
+  border: 1px solid var(--navy);
+  border-radius: 4px;
+  font-size: 13px;
+  text-align: left;
+  transition: background 0.2s;
+}
+#music-menu button:hover {
+  background: var(--gold);
+  color: var(--navy);
+}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
+
+<!-- ===== TOMBOL & MENU PEMUTAR MUSIK ===== -->
+<div id="music-container">
+  <button id="music-btn" onclick="toggleMusicMenu()">🎵 Musik</button>
+  <div id="music-menu" class="menu-hidden">
+    <p>Pilih Lagu:</p>
+    <button onclick="playSong('musik1.mp3')">▶️ Lagu 1</button>
+    <button onclick="playSong('musik2.mp3')">▶️ Lagu 2</button>
+    <button onclick="playSong('musik3.mp3')">▶️ Lagu 3</button>
+    <button onclick="stopMusic()" style="background:#fce8e6; text-align:center; font-weight:bold;">⏹️ Matikan</button>
+  </div>
+  <audio id="bg-audio" loop></audio>
+</div>
 
 <!-- ===== AMPLOP ===== -->
 <main id="amplop" class="stage on">
@@ -269,6 +345,28 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 </main>
 
 <script>
+/* ---------- SCRIPT TAMBAHAN UNTUK MUSIK ---------- */
+function toggleMusicMenu() {
+  var menu = document.getElementById("music-menu");
+  menu.classList.toggle("menu-hidden");
+}
+
+function playSong(filename) {
+  var audio = document.getElementById("bg-audio");
+  audio.src = filename;
+  audio.play().catch(function(error) {
+    console.log("Autoplay dicegah browser, perlu interaksi klik.");
+  });
+  document.getElementById("music-menu").classList.add("menu-hidden");
+}
+
+function stopMusic() {
+  var audio = document.getElementById("bg-audio");
+  audio.pause();
+  audio.currentTime = 0;
+  document.getElementById("music-menu").classList.add("menu-hidden");
+}
+
 (function(){
   var $ = function(id){return document.getElementById(id)};
   var nama = "";
