@@ -3,47 +3,56 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kartu dari KKPH</title>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<title>Kartu Dari KKPH</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Lora:wght@400;500;600&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --mat:#3f6f62; --mat-line:rgba(255,255,255,.09);
-  --kraft:#c4975f; --kraft-dark:#a97b45;
-  --paper:#fffef9; --ink:#2b3a67; --red:#d64933; --tape:rgba(242,201,76,.85);
-  --rule:#bcd3ea;
+  --brick:#8e3b2f; --brick-dark:#6e2a21; --brick-line:rgba(255,255,255,.07);
+  --parchment:#d9bb8c; --parchment-dark:#b99562;
+  --navy:#1f2a44; --gold:#d9a441; --gold-soft:rgba(217,164,65,.88);
+  --paper:#fbf5e9; --ink:#1f2a44; --red:#a8322a; --rule:#c9d3e3;
+  --serif:'Playfair Display',Georgia,serif;
+  --body:'Lora',Georgia,serif;
+  --script:'Dancing Script','Segoe Script',cursive;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{min-height:100%}
 body{
-  font-family:'Patrick Hand',cursive;color:var(--ink);font-size:18px;
-  background-color:var(--mat);
+  font-family:var(--body);color:var(--ink);font-size:17px;
+  background-color:var(--brick-dark);
   background-image:
-    linear-gradient(var(--mat-line) 1px,transparent 1px),
-    linear-gradient(90deg,var(--mat-line) 1px,transparent 1px);
-  background-size:28px 28px;
+    /* pinggiran gelap halus */
+    radial-gradient(ellipse at 50% 40%,rgba(0,0,0,0) 45%,rgba(0,0,0,.35) 100%),
+    /* corak kawung (motif batik) */
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'><g fill='none' stroke='%23f1c98a' stroke-opacity='.16' stroke-width='1.3'><ellipse cx='40' cy='20' rx='9' ry='18'/><ellipse cx='40' cy='60' rx='9' ry='18'/><ellipse cx='20' cy='40' rx='18' ry='9'/><ellipse cx='60' cy='40' rx='18' ry='9'/></g><g fill='%23d9a441' fill-opacity='.22'><circle cx='40' cy='40' r='2.6'/><circle cx='0' cy='0' r='2.2'/><circle cx='80' cy='0' r='2.2'/><circle cx='0' cy='80' r='2.2'/><circle cx='80' cy='80' r='2.2'/></g></svg>"),
+    /* garis diagonal tipis */
+    repeating-linear-gradient(45deg,rgba(255,255,255,.035) 0 1px,transparent 1px 22px),
+    linear-gradient(180deg,var(--brick) 0%,var(--brick-dark) 100%);
+  background-size:100% 100%,80px 80px,auto,100% 100%;
+  background-attachment:fixed,scroll,scroll,fixed;
   display:flex;justify-content:center;padding:28px 14px 60px;overflow-x:hidden;
 }
 button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
-:focus-visible{outline:3px solid var(--tape);outline-offset:3px}
-.hand{font-family:'Caveat',cursive}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.hand{font-family:var(--script)}
 .stage{display:none;width:100%;max-width:400px}
 .stage.on{display:block}
 
 /* ---------- AMPLOP ---------- */
 #amplop{padding-top:6vh;text-align:center}
-.envelope{position:relative;width:100%;height:250px;margin:0 auto;perspective:900px;transition:transform .8s ease .5s,opacity .5s ease 1s}
-.env-back{position:absolute;inset:0;background:var(--kraft-dark);border-radius:6px;box-shadow:0 14px 24px rgba(0,0,0,.3)}
+.envelope{position:relative;width:100%;height:290px;margin:0 auto;perspective:900px;transition:transform .8s ease .5s,opacity .5s ease 1s}
+.env-back{position:absolute;inset:0;background:var(--parchment-dark);border-radius:6px;box-shadow:0 14px 24px rgba(0,0,0,.4)}
 .env-front{
   position:absolute;inset:0;border-radius:6px;
   background:
-    linear-gradient(153deg,transparent 49.5%,rgba(0,0,0,.12) 50%,transparent 50.6%) left/50% 100% no-repeat,
-    linear-gradient(-153deg,transparent 49.5%,rgba(0,0,0,.12) 50%,transparent 50.6%) right/50% 100% no-repeat,
-    var(--kraft);
+    linear-gradient(153deg,transparent 49.5%,rgba(0,0,0,.14) 50%,transparent 50.6%) left/50% 100% no-repeat,
+    linear-gradient(-153deg,transparent 49.5%,rgba(0,0,0,.14) 50%,transparent 50.6%) right/50% 100% no-repeat,
+    var(--parchment);
   clip-path:polygon(0 0,50% 58%,100% 0,100% 100%,0 100%);
 }
 .env-flap{
   position:absolute;left:0;top:0;width:100%;height:58%;
-  background:var(--kraft);clip-path:polygon(0 0,100% 0,50% 100%);
+  background:var(--parchment);clip-path:polygon(0 0,100% 0,50% 100%);
   transform-origin:top;transition:transform .6s ease;z-index:3;
 }
 .envelope.open .env-flap{transform:rotateX(180deg);z-index:0}
@@ -51,34 +60,42 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 .envelope.open .env-letter{transform:translateY(-70px)}
 .envelope.gone{transform:translateY(120px) scale(.9);opacity:0}
 .label{
-  position:absolute;left:50%;bottom:26px;transform:translateX(-50%) rotate(-2deg);
-  width:74%;background:#fffdf3;padding:10px 12px 12px;z-index:4;
-  box-shadow:0 2px 5px rgba(0,0,0,.2);text-align:left;
+  position:absolute;left:50%;bottom:22px;transform:translateX(-50%) rotate(-2deg);
+  width:78%;background:#fffaf0;padding:8px 12px 10px;z-index:4;
+  box-shadow:0 2px 5px rgba(0,0,0,.25);text-align:left;border-left:4px solid var(--brick);
 }
-.label small{display:block;font-size:14px;opacity:.65}
+.label .row{display:flex;align-items:baseline;gap:8px}
+.label small{display:inline-block;width:46px;flex:none;font-size:13px;opacity:.65;font-style:italic}
 .label input{
-  width:100%;border:0;border-bottom:2px dashed var(--ink);background:transparent;
-  font:700 28px 'Caveat',cursive;color:var(--ink);padding:0 2px;outline:none
+  flex:1;min-width:0;border:0;border-bottom:2px dashed var(--ink);background:transparent;
+  font:700 24px var(--script);color:var(--ink);padding:0 2px;outline:none
 }
-.label input::placeholder{color:#9aa5c7;font-weight:500}
+.label input:focus{border-bottom-color:var(--brick)}
+.label input::placeholder{color:#9aa5c7;font-weight:600}
 .stamp{
-  position:absolute;right:16px;top:16px;width:58px;height:70px;z-index:4;background:#fff8e6;padding:5px;
+  position:absolute;right:16px;top:16px;width:58px;height:70px;z-index:4;background:#fff6dc;padding:5px;
   transform:rotate(4deg);
   -webkit-mask:radial-gradient(circle 4px at 4px 4px,transparent 96%,#000) -4px -4px/8px 8px;
   mask:radial-gradient(circle 4px at 4px 4px,transparent 96%,#000) -4px -4px/8px 8px;
-  display:grid;place-items:center;font-size:30px;
+  display:grid;place-items:center;
 }
-.stamp::after{content:"";position:absolute;inset:5px;border:2px solid var(--red)}
+.stamp::after{content:"";position:absolute;inset:5px;border:2px solid var(--brick)}
+.stamp svg{width:34px;height:34px}
 .seal{
-  position:absolute;left:50%;top:44%;width:70px;height:70px;margin:-35px 0 0 -35px;z-index:5;
-  border-radius:50%;background:radial-gradient(circle at 35% 30%,#ef6a55,var(--red) 60%,#a92f1e);
-  color:#ffd9d1;font:700 34px 'Caveat',cursive;box-shadow:0 4px 8px rgba(0,0,0,.35);
-  transition:transform .2s;
+  position:absolute;left:50%;top:36%;width:70px;height:70px;margin:-35px 0 0 -35px;z-index:5;
+  border-radius:50%;background:radial-gradient(circle at 35% 30%,#c0503f,var(--brick) 60%,#5a1f18);
+  color:var(--gold);font:800 34px var(--serif);box-shadow:0 4px 8px rgba(0,0,0,.4),inset 0 0 0 4px rgba(217,164,65,.35);
+  transition:transform .2s,filter .3s;
 }
-.seal:hover{transform:scale(1.08) rotate(-6deg)}
+.seal:not(:disabled):hover{transform:scale(1.08) rotate(-6deg)}
+.seal:disabled{
+  cursor:not-allowed;filter:grayscale(.85) brightness(.75);
+  box-shadow:0 2px 4px rgba(0,0,0,.3),inset 0 0 0 4px rgba(255,255,255,.12);
+}
 .envelope.open .seal{display:none}
-.hint{margin-top:26px;color:#e9f3ee;font-size:17px}
-.err{color:#ffd6cf;margin-top:10px;min-height:22px}
+.hint{margin-top:26px;color:#f6e6dc;font-size:16px;line-height:1.5}
+.err{color:#ffd9b8;margin-top:10px;min-height:22px;font-size:15px}
+.err.ok{color:#bff0c8}
 @keyframes geter{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
 .geter{animation:geter .35s}
 
@@ -87,73 +104,75 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 @keyframes muncul{from{opacity:0;transform:translateY(40px) rotate(2deg)}to{opacity:1;transform:none}}
 .inside{
   background:var(--paper);border-radius:4px;padding:22px 20px 26px;
-  box-shadow:0 16px 30px rgba(0,0,0,.3);position:relative;min-height:640px;
+  box-shadow:0 16px 30px rgba(0,0,0,.4);position:relative;min-height:660px;
+  border-top:6px solid var(--gold);
 }
 .cover{
   position:absolute;inset:0;z-index:10;border-radius:4px;transform-origin:left center;
   background:
-    radial-gradient(circle at 20% 15%,rgba(255,255,255,.35) 0 6px,transparent 7px),
-    radial-gradient(circle at 78% 30%,rgba(255,255,255,.3) 0 4px,transparent 5px),
-    radial-gradient(circle at 40% 82%,rgba(255,255,255,.3) 0 8px,transparent 9px),
-    #f3b63f;
-  box-shadow:0 16px 30px rgba(0,0,0,.35);
+    linear-gradient(90deg,rgba(0,0,0,.28) 0,rgba(0,0,0,0) 14px),
+    var(--navy);
+  box-shadow:0 16px 30px rgba(0,0,0,.45);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
   padding:30px;text-align:center;cursor:pointer;
   transition:transform 1s cubic-bezier(.5,0,.3,1),opacity .3s ease .75s;
+  outline:2px solid var(--gold-soft);outline-offset:-14px;
 }
 .cover.terbuka{transform:perspective(1200px) rotateY(-165deg);opacity:0;pointer-events:none}
-.cover h1{font:700 44px/1 'Caveat',cursive;color:#5b2a12;transform:rotate(-3deg)}
-.cover p{color:#5b2a12;font-size:19px;max-width:250px}
-.cover .tap{margin-top:8px;background:#5b2a12;color:#ffe9b0;padding:8px 18px;border-radius:30px;font-size:17px}
-.cover .fig{font-size:80px;filter:drop-shadow(3px 4px 0 rgba(91,42,18,.25));transform:rotate(6deg)}
-.tape{position:absolute;width:86px;height:26px;background:var(--tape);z-index:2}
+.cover h1{font:800 32px/1.15 var(--serif);color:var(--gold);}
+.cover .nimtag{color:#c9bfa5;font-size:14px;font-style:italic;margin-top:-8px;max-width:none}
+.cover p{color:#e8dfc8;font-size:16px;max-width:250px;line-height:1.5}
+.cover .tap{margin-top:8px;background:var(--gold);color:var(--navy);padding:8px 20px;border-radius:30px;font-size:15px;font-weight:600}
+.cover .fig{width:120px;height:120px;filter:drop-shadow(0 4px 0 rgba(0,0,0,.35))}
+.tape{position:absolute;width:86px;height:26px;background:var(--gold-soft);z-index:2}
 .tape.a{top:-11px;left:24px;transform:rotate(-6deg)}
 .tape.b{top:-11px;right:24px;transform:rotate(5deg)}
 
-.judul{font:700 34px/1.05 'Caveat',cursive;margin:6px 0 4px}
-.kecil{font-size:16px;opacity:.75}
+.judul{font:800 25px/1.2 var(--serif);margin:6px 0 4px}
+.kecil{font-size:14.5px;opacity:.75}
 
 /* foto */
-.foto{background:#fff;padding:10px 10px 8px;box-shadow:0 3px 9px rgba(0,0,0,.22);transform:rotate(-1.6deg);margin:18px 6px 10px;position:relative;transition:transform .3s}
+.foto{background:#fff;padding:10px 10px 8px;box-shadow:0 3px 9px rgba(0,0,0,.25);transform:rotate(-1.6deg);margin:18px 6px 10px;position:relative;transition:transform .3s}
 .foto.ganti{transform:rotate(2deg) scale(.97)}
 .foto .tape{width:62px;height:20px;top:-10px;left:50%;margin-left:-31px;transform:rotate(3deg)}
 .foto img{display:block;width:100%;height:210px;object-fit:cover;background:#eee}
-.foto figcaption{font:700 23px 'Caveat',cursive;text-align:center;margin-top:6px}
+.foto figcaption{font:700 22px var(--script);text-align:center;margin-top:6px}
 .nav{display:flex;justify-content:space-between;align-items:center;margin:0 6px 8px}
-.nav button{padding:4px 12px;border:2px solid var(--ink);border-radius:20px;background:#fff}
-.nav button:hover{background:var(--ink);color:#fff}
+.nav button{padding:4px 14px;border:2px solid var(--navy);border-radius:20px;background:#fff;font-size:15px}
+.nav button:hover{background:var(--navy);color:#fff}
 
 /* kertas bergaris */
 .kertas{
   margin-top:16px;padding:6px 8px 4px 34px;position:relative;min-height:230px;
   background:
-    linear-gradient(90deg,transparent 26px,#ef9a9a 26px,#ef9a9a 28px,transparent 28px),
+    linear-gradient(90deg,transparent 26px,#d98a80 26px,#d98a80 28px,transparent 28px),
     repeating-linear-gradient(transparent 0 27px,var(--rule) 27px 28px);
-  line-height:28px;cursor:crosshair;
+  line-height:28px;cursor:crosshair;font-size:16px;
 }
 .kertas p{margin-bottom:28px}
-.kertas .ttd{font:700 26px 'Caveat',cursive;text-align:right;margin:0;line-height:30px}
+.kertas .ttd{font:700 26px var(--script);text-align:right;margin:0;line-height:30px}
 .tempel{position:absolute;font-size:34px;transform:translate(-50%,-50%) rotate(var(--r));pointer-events:none;animation:plak .25s ease-out}
 @keyframes plak{from{transform:translate(-50%,-50%) scale(2) rotate(var(--r));opacity:0}}
 
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
-.chip{padding:5px 13px;border:2px solid var(--ink);border-radius:22px;background:#fff;font-size:17px;transition:transform .15s}
+.chip{padding:5px 13px;border:2px solid var(--navy);border-radius:22px;background:#fff;font-size:15px;transition:transform .15s}
 .chip:hover{transform:rotate(-3deg) scale(1.05)}
-.chip[aria-pressed=true]{background:var(--ink);color:#fff}
+.chip[aria-pressed=true]{background:var(--navy);color:#fff}
 
 .kupon{
-  margin-top:22px;padding:12px 16px 12px 22px;background:#ffe9b8;position:relative;
-  border:2px dashed #b8842a;border-radius:4px;transform:rotate(.8deg)
+  margin-top:22px;padding:12px 16px 12px 22px;background:#f6e3b4;position:relative;
+  border:2px dashed #a8782a;border-radius:4px;transform:rotate(.8deg)
 }
-.kupon::before,.kupon::after{content:"";position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:var(--paper);margin-top:-8px;border:2px dashed #b8842a}
+.kupon::before,.kupon::after{content:"";position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:var(--paper);margin-top:-8px;border:2px dashed #a8782a}
 .kupon::before{left:-10px}.kupon::after{right:-10px}
-.kupon b{font:700 24px 'Caveat',cursive;display:block}
+.kupon small{font-size:13px;font-style:italic}
+.kupon b{font:600 19px/1.3 var(--serif);font-style:italic;display:block;margin-top:2px}
 
 .stiker{display:flex;gap:6px;align-items:center;margin-top:16px;flex-wrap:wrap}
-.stiker button{font-size:26px;width:44px;height:44px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.25)}
-.stiker button[aria-pressed=true]{outline:3px solid var(--red)}
+.stiker button{font-size:24px;width:44px;height:44px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.stiker button[aria-pressed=true]{outline:3px solid var(--brick)}
 .aksi{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
-.tombol{padding:8px 16px;background:var(--red);color:#fff;border-radius:6px;box-shadow:0 3px 0 #9c2f1f}
+.tombol{padding:8px 18px;background:var(--brick);color:#fff;border-radius:6px;box-shadow:0 3px 0 var(--brick-dark);font-weight:500}
 .tombol:active{transform:translateY(3px);box-shadow:none}
 .tombol.polos{background:#fff;color:var(--ink);box-shadow:0 3px 0 #b7c2e0}
 
@@ -169,24 +188,43 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
     <div class="env-letter"></div>
     <div class="env-front"></div>
     <div class="env-flap"></div>
-    <div class="stamp" aria-hidden="true">🐢</div>
-    <div class="label">
-      <small>Untuk:</small>
-      <input id="nama" type="text" maxlength="24" placeholder="tulis namamu" autocomplete="off" aria-label="Nama kamu">
+    <div class="stamp" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none" stroke="#8e3b2f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="50" y1="14" x2="50" y2="84"/><line x1="24" y1="26" x2="76" y2="26"/>
+        <path d="M24 26 L12 58 M24 26 L36 58 M76 26 L64 58 M76 26 L88 58"/>
+        <path d="M10 58 Q24 74 38 58 Z M62 58 Q76 74 90 58 Z"/><path d="M34 88 H66"/>
+      </svg>
     </div>
-    <button class="seal" id="seal" aria-label="Buka amplop">K</button>
+    <div class="label">
+      <div class="row">
+        <small>Untuk:</small>
+        <input id="nama" type="text" maxlength="24" placeholder="tulis namamu" autocomplete="off" aria-label="Nama kamu">
+      </div>
+      <div class="row">
+        <small>NIM:</small>
+        <input id="nim" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="15" placeholder="nomor induk" autocomplete="off" aria-label="NIM kamu">
+      </div>
+    </div>
+    <button class="seal" id="seal" aria-label="Buka amplop" disabled>§</button>
   </div>
-  <p class="err" id="err" role="alert"></p>
-  <p class="hint">Ada kartu dari anak-anak KKPH UHB buat kamu. Tulis namamu di label, lalu pencet segel merahnya.</p>
+  <p class="err" id="err" role="status" aria-live="polite"></p>
+  <p class="hint">Ada Kartu Dari anak anak KKPH ni. Tulis nama dan NIM-mu di label, dua-duanya harus keisi ya, baru segel merahnya bisa dipencet/teken. Jangan di makan ya hehe canda emot ketawa.</p>
 </main>
 
 <!-- ===== KARTU ===== -->
 <main id="kartu" class="stage">
   <div class="card-wrap">
     <div class="cover" id="cover" role="button" tabindex="0" aria-label="Buka kartu">
-      <div class="fig" aria-hidden="true">📎</div>
-      <h1 id="sampulNama">Halo!</h1>
-      <p>Kamu sudah baca berapa pasal hari ini? Istirahat dulu, ada yang nitip salam.</p>
+      <svg class="fig" viewBox="0 0 100 100" fill="none" stroke="#d9a441" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="50" cy="12" r="4" fill="#d9a441"/>
+        <line x1="50" y1="16" x2="50" y2="84"/><line x1="22" y1="26" x2="78" y2="26"/>
+        <path d="M22 26 L10 58 M22 26 L34 58 M78 26 L66 58 M78 26 L90 58"/>
+        <path d="M8 58 Q22 76 36 58 Z M64 58 Q78 76 92 58 Z" fill="rgba(217,164,65,.25)"/>
+        <path d="M34 90 H66 M40 84 H60"/>
+      </svg>
+      <h1 id="sampulNama">Halo Kawan Kawan!</h1>
+      <p class="nimtag" id="sampulNim"></p>
+      <p>Kamu udah baca brapa pasal hari iniii? Istirahat sebentarr nyakk, ada yang mau nitip salam nih.</p>
       <span class="tap">buka kartunya</span>
     </div>
 
@@ -206,11 +244,11 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
         <button id="next" aria-label="Foto berikutnya">Lanjut</button>
       </div>
 
-      <h3 class="judul" style="margin-top:22px">Hari ini kamu lagi gimana?</h3>
+      <h3 class="judul" style="margin-top:22px">Apa Kabar Kamu Hari ini,bolehlah spil perasaanmu today?</h3>
       <div class="chips" id="chips" role="group" aria-label="Pilih suasana hati"></div>
 
       <div class="kertas" id="kertas" aria-live="polite">
-        <p id="isiSurat">Pilih dulu salah satu di atas, nanti surat ini terisi.</p>
+        <p id="isiSurat">Pilih dulu salah satu di atas, biar suratnya ga kososng kaya hati mimin,aw.</p>
         <p class="ttd" id="ttd"></p>
       </div>
 
@@ -224,7 +262,7 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 
       <div class="aksi">
         <button class="tombol" id="lain">Surat lain</button>
-        <button class="tombol polos" id="ulang">Tutup kartu</button>
+        <button class="tombol polos" id="ulang">Tutup Kartunya ya</button>
       </div>
     </section>
   </div>
@@ -234,6 +272,7 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 (function(){
   var $ = function(id){return document.getElementById(id)};
   var nama = "";
+  var nim = "";
 
   /* ---------- data ---------- */
   var fotoList = [
@@ -285,23 +324,55 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
       ],
       kupon:"Boleh menghilang dari grup 1 jam"}
   };
-  var stikerList = ["⭐","🍓","🐢","💛","📎","🌸"];
+  var stikerList = ["⚖️","📜","🔨","⭐","💛","🌸"];
+
+  /* ---------- validasi nama + NIM ---------- */
+  var NIM_MIN = 5; // minimal jumlah angka NIM (ubah kalau perlu)
+
+  function cekForm(){
+    var n = $("nama").value.trim();
+    var m = $("nim").value.trim();
+    var namaOk = n.length > 0;
+    var nimOk = new RegExp("^\\d{" + NIM_MIN + ",}$").test(m);
+    var ok = namaOk && nimOk;
+
+    $("seal").disabled = !ok;
+    $("seal").setAttribute("aria-label", ok ? "Buka amplop" : "Segel terkunci, isi nama dan NIM dulu");
+
+    var pesan;
+    if(ok) pesan = "Sip, segelnya udah bisa dipencet.";
+    else if(!namaOk && !m) pesan = "Segel masih terkunci. Isi nama dan NIM dulu ya.";
+    else if(!namaOk) pesan = "Nama belum diisi.";
+    else if(!m) pesan = "NIM belum diisi.";
+    else pesan = "NIM minimal " + NIM_MIN + " angka.";
+    $("err").textContent = pesan;
+    $("err").classList.toggle("ok", ok);
+    return ok;
+  }
+
+  $("nama").addEventListener("input",cekForm);
+  $("nim").addEventListener("input",function(){
+    this.value = this.value.replace(/\D/g,"");
+    cekForm();
+  });
 
   /* ---------- amplop ---------- */
   function bukaAmplop(){
-    var v = $("nama").value.trim();
-    if(!v){
-      $("err").textContent = "Namanya belum diisi, nanti kartunya nggak tahu ini buat siapa.";
+    if(!cekForm()){
       var e = $("envelope"); e.classList.remove("geter"); void e.offsetWidth; e.classList.add("geter");
-      $("nama").focus(); return;
+      if(!$("nama").value.trim()) $("nama").focus(); else $("nim").focus();
+      return;
     }
-    nama = v; $("err").textContent = "";
+    nama = $("nama").value.trim();
+    nim = $("nim").value.trim();
+    $("err").textContent = "";
     $("envelope").classList.add("open");
     setTimeout(function(){ $("envelope").classList.add("gone"); },900);
     setTimeout(function(){
       $("amplop").classList.remove("on");
       $("kartu").classList.add("on");
       $("sampulNama").textContent = "Halo, " + nama + "!";
+      $("sampulNim").textContent = "NIM " + nim;
       $("judulDalam").textContent = "Buat " + nama + ", dari kami semua";
       window.scrollTo(0,0);
       $("cover").focus();
@@ -309,7 +380,8 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
   }
   $("seal").addEventListener("click",bukaAmplop);
   $("nama").addEventListener("keydown",function(e){ if(e.key==="Enter") bukaAmplop(); });
-  $("nama").addEventListener("input",function(){ $("err").textContent=""; });
+  $("nim").addEventListener("keydown",function(e){ if(e.key==="Enter") bukaAmplop(); });
+  cekForm();
 
   /* ---------- sampul ---------- */
   function bukaSampul(){ $("cover").classList.add("terbuka"); }
