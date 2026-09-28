@@ -1,642 +1,413 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Little Letter For You - KKPH UHB 2026</title>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --card-bg: #fffbf7;        
-            --text-main: #2b1713;       
-            --text-muted: #73594e;      
-            --accent-color: #5c1d1a;    
-            --accent-hover: #431412;    
-            --border-color: #e8ded3;    
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kartu dari KKPH</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+:root{
+  --mat:#3f6f62; --mat-line:rgba(255,255,255,.09);
+  --kraft:#c4975f; --kraft-dark:#a97b45;
+  --paper:#fffef9; --ink:#2b3a67; --red:#d64933; --tape:rgba(242,201,76,.85);
+  --rule:#bcd3ea;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:'Patrick Hand',cursive;color:var(--ink);font-size:18px;
+  background-color:var(--mat);
+  background-image:
+    linear-gradient(var(--mat-line) 1px,transparent 1px),
+    linear-gradient(90deg,var(--mat-line) 1px,transparent 1px);
+  background-size:28px 28px;
+  display:flex;justify-content:center;padding:28px 14px 60px;overflow-x:hidden;
+}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+:focus-visible{outline:3px solid var(--tape);outline-offset:3px}
+.hand{font-family:'Caveat',cursive}
+.stage{display:none;width:100%;max-width:400px}
+.stage.on{display:block}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
+/* ---------- AMPLOP ---------- */
+#amplop{padding-top:6vh;text-align:center}
+.envelope{position:relative;width:100%;height:250px;margin:0 auto;perspective:900px;transition:transform .8s ease .5s,opacity .5s ease 1s}
+.env-back{position:absolute;inset:0;background:var(--kraft-dark);border-radius:6px;box-shadow:0 14px 24px rgba(0,0,0,.3)}
+.env-front{
+  position:absolute;inset:0;border-radius:6px;
+  background:
+    linear-gradient(153deg,transparent 49.5%,rgba(0,0,0,.12) 50%,transparent 50.6%) left/50% 100% no-repeat,
+    linear-gradient(-153deg,transparent 49.5%,rgba(0,0,0,.12) 50%,transparent 50.6%) right/50% 100% no-repeat,
+    var(--kraft);
+  clip-path:polygon(0 0,50% 58%,100% 0,100% 100%,0 100%);
+}
+.env-flap{
+  position:absolute;left:0;top:0;width:100%;height:58%;
+  background:var(--kraft);clip-path:polygon(0 0,100% 0,50% 100%);
+  transform-origin:top;transition:transform .6s ease;z-index:3;
+}
+.envelope.open .env-flap{transform:rotateX(180deg);z-index:0}
+.env-letter{position:absolute;left:8%;right:8%;top:10%;height:80%;background:var(--paper);border-radius:4px;transition:transform .6s ease .5s;z-index:1}
+.envelope.open .env-letter{transform:translateY(-70px)}
+.envelope.gone{transform:translateY(120px) scale(.9);opacity:0}
+.label{
+  position:absolute;left:50%;bottom:26px;transform:translateX(-50%) rotate(-2deg);
+  width:74%;background:#fffdf3;padding:10px 12px 12px;z-index:4;
+  box-shadow:0 2px 5px rgba(0,0,0,.2);text-align:left;
+}
+.label small{display:block;font-size:14px;opacity:.65}
+.label input{
+  width:100%;border:0;border-bottom:2px dashed var(--ink);background:transparent;
+  font:700 28px 'Caveat',cursive;color:var(--ink);padding:0 2px;outline:none
+}
+.label input::placeholder{color:#9aa5c7;font-weight:500}
+.stamp{
+  position:absolute;right:16px;top:16px;width:58px;height:70px;z-index:4;background:#fff8e6;padding:5px;
+  transform:rotate(4deg);
+  -webkit-mask:radial-gradient(circle 4px at 4px 4px,transparent 96%,#000) -4px -4px/8px 8px;
+  mask:radial-gradient(circle 4px at 4px 4px,transparent 96%,#000) -4px -4px/8px 8px;
+  display:grid;place-items:center;font-size:30px;
+}
+.stamp::after{content:"";position:absolute;inset:5px;border:2px solid var(--red)}
+.seal{
+  position:absolute;left:50%;top:44%;width:70px;height:70px;margin:-35px 0 0 -35px;z-index:5;
+  border-radius:50%;background:radial-gradient(circle at 35% 30%,#ef6a55,var(--red) 60%,#a92f1e);
+  color:#ffd9d1;font:700 34px 'Caveat',cursive;box-shadow:0 4px 8px rgba(0,0,0,.35);
+  transition:transform .2s;
+}
+.seal:hover{transform:scale(1.08) rotate(-6deg)}
+.envelope.open .seal{display:none}
+.hint{margin-top:26px;color:#e9f3ee;font-size:17px}
+.err{color:#ffd6cf;margin-top:10px;min-height:22px}
+@keyframes geter{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.geter{animation:geter .35s}
 
-        body {
-            /* Background gradasi mewah multi-warna */
-            background: radial-gradient(circle at 30% 30%, #4a1f1d 0%, #26110f 45%, #120706 100%);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 16px;
-            position: relative;
-            overflow-x: hidden;
-        }
+/* ---------- KARTU ---------- */
+.card-wrap{position:relative;animation:muncul .6s ease}
+@keyframes muncul{from{opacity:0;transform:translateY(40px) rotate(2deg)}to{opacity:1;transform:none}}
+.inside{
+  background:var(--paper);border-radius:4px;padding:22px 20px 26px;
+  box-shadow:0 16px 30px rgba(0,0,0,.3);position:relative;min-height:640px;
+}
+.cover{
+  position:absolute;inset:0;z-index:10;border-radius:4px;transform-origin:left center;
+  background:
+    radial-gradient(circle at 20% 15%,rgba(255,255,255,.35) 0 6px,transparent 7px),
+    radial-gradient(circle at 78% 30%,rgba(255,255,255,.3) 0 4px,transparent 5px),
+    radial-gradient(circle at 40% 82%,rgba(255,255,255,.3) 0 8px,transparent 9px),
+    #f3b63f;
+  box-shadow:0 16px 30px rgba(0,0,0,.35);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  padding:30px;text-align:center;cursor:pointer;
+  transition:transform 1s cubic-bezier(.5,0,.3,1),opacity .3s ease .75s;
+}
+.cover.terbuka{transform:perspective(1200px) rotateY(-165deg);opacity:0;pointer-events:none}
+.cover h1{font:700 44px/1 'Caveat',cursive;color:#5b2a12;transform:rotate(-3deg)}
+.cover p{color:#5b2a12;font-size:19px;max-width:250px}
+.cover .tap{margin-top:8px;background:#5b2a12;color:#ffe9b0;padding:8px 18px;border-radius:30px;font-size:17px}
+.cover .fig{font-size:80px;filter:drop-shadow(3px 4px 0 rgba(91,42,18,.25));transform:rotate(6deg)}
+.tape{position:absolute;width:86px;height:26px;background:var(--tape);z-index:2}
+.tape.a{top:-11px;left:24px;transform:rotate(-6deg)}
+.tape.b{top:-11px;right:24px;transform:rotate(5deg)}
 
-        /* Ornamen Background Ramai & Estetik (Timbangan, Buku, Gulungan, Palu) */
-        .bg-icon {
-            position: absolute;
-            opacity: 0.07;
-            user-select: none;
-            pointer-events: none;
-            z-index: 0;
-        }
+.judul{font:700 34px/1.05 'Caveat',cursive;margin:6px 0 4px}
+.kecil{font-size:16px;opacity:.75}
 
-        .icon-1 { top: 5%; left: 8%; font-size: 5rem; transform: rotate(-15deg); }
-        .icon-2 { top: 12%; right: 10%; font-size: 6rem; transform: rotate(20deg); }
-        .icon-3 { bottom: 8%; left: 10%; font-size: 7rem; transform: rotate(10deg); }
-        .icon-4 { bottom: 12%; right: 8%; font-size: 5.5rem; transform: rotate(-25deg); }
-        .icon-5 { top: 45%; left: 3%; font-size: 4rem; transform: rotate(45deg); }
-        .icon-6 { top: 50%; right: 4%; font-size: 4.5rem; transform: rotate(-30deg); }
+/* foto */
+.foto{background:#fff;padding:10px 10px 8px;box-shadow:0 3px 9px rgba(0,0,0,.22);transform:rotate(-1.6deg);margin:18px 6px 10px;position:relative;transition:transform .3s}
+.foto.ganti{transform:rotate(2deg) scale(.97)}
+.foto .tape{width:62px;height:20px;top:-10px;left:50%;margin-left:-31px;transform:rotate(3deg)}
+.foto img{display:block;width:100%;height:210px;object-fit:cover;background:#eee}
+.foto figcaption{font:700 23px 'Caveat',cursive;text-align:center;margin-top:6px}
+.nav{display:flex;justify-content:space-between;align-items:center;margin:0 6px 8px}
+.nav button{padding:4px 12px;border:2px solid var(--ink);border-radius:20px;background:#fff}
+.nav button:hover{background:var(--ink);color:#fff}
 
-        /* Container menyerupai layar HP supaya estetik */
-        .phone-container {
-            width: 100%;
-            max-width: 412px;
-            background: var(--card-bg);
-            background-image: linear-gradient(to bottom, #fffbf7 0%, #f7f0e8 100%);
-            border-radius: 36px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1);
-            overflow: hidden;
-            position: relative;
-            z-index: 1;
-            min-height: 780px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 32px 24px;
-        }
+/* kertas bergaris */
+.kertas{
+  margin-top:16px;padding:6px 8px 4px 34px;position:relative;min-height:230px;
+  background:
+    linear-gradient(90deg,transparent 26px,#ef9a9a 26px,#ef9a9a 28px,transparent 28px),
+    repeating-linear-gradient(transparent 0 27px,var(--rule) 27px 28px);
+  line-height:28px;cursor:crosshair;
+}
+.kertas p{margin-bottom:28px}
+.kertas .ttd{font:700 26px 'Caveat',cursive;text-align:right;margin:0;line-height:30px}
+.tempel{position:absolute;font-size:34px;transform:translate(-50%,-50%) rotate(var(--r));pointer-events:none;animation:plak .25s ease-out}
+@keyframes plak{from{transform:translate(-50%,-50%) scale(2) rotate(var(--r));opacity:0}}
 
-        .card-watermark {
-            position: absolute;
-            top: 20px;
-            right: 24px;
-            font-size: 22px;
-            opacity: 0.25;
-            pointer-events: none;
-        }
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
+.chip{padding:5px 13px;border:2px solid var(--ink);border-radius:22px;background:#fff;font-size:17px;transition:transform .15s}
+.chip:hover{transform:rotate(-3deg) scale(1.05)}
+.chip[aria-pressed=true]{background:var(--ink);color:#fff}
 
-        h1, h2, h3 {
-            font-family: 'Playfair Display', serif;
-            color: var(--text-main);
-        }
+.kupon{
+  margin-top:22px;padding:12px 16px 12px 22px;background:#ffe9b8;position:relative;
+  border:2px dashed #b8842a;border-radius:4px;transform:rotate(.8deg)
+}
+.kupon::before,.kupon::after{content:"";position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:var(--paper);margin-top:-8px;border:2px dashed #b8842a}
+.kupon::before{left:-10px}.kupon::after{right:-10px}
+.kupon b{font:700 24px 'Caveat',cursive;display:block}
 
-        .screen {
-            display: none;
-            flex-direction: column;
-            gap: 20px;
-            animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            flex-grow: 1;
-        }
+.stiker{display:flex;gap:6px;align-items:center;margin-top:16px;flex-wrap:wrap}
+.stiker button{font-size:26px;width:44px;height:44px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.stiker button[aria-pressed=true]{outline:3px solid var(--red)}
+.aksi{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.tombol{padding:8px 16px;background:var(--red);color:#fff;border-radius:6px;box-shadow:0 3px 0 #9c2f1f}
+.tombol:active{transform:translateY(3px);box-shadow:none}
+.tombol.polos{background:#fff;color:var(--ink);box-shadow:0 3px 0 #b7c2e0}
 
-        .screen.active {
-            display: flex;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .top-nav {
-            font-size: 11.5px;
-            color: var(--accent-color);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-weight: 700;
-        }
-
-        .back-btn {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 13px;
-            cursor: pointer;
-            text-align: left;
-            font-weight: 600;
-            transition: color 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .back-btn:hover {
-            color: var(--accent-color);
-        }
-
-        .title {
-            font-size: 28px;
-            font-weight: 700;
-            line-height: 1.25;
-            color: var(--accent-color);
-        }
-
-        .subtitle {
-            font-size: 14px;
-            line-height: 1.6;
-            color: var(--text-muted);
-        }
-
-        /* Input Form */
-        .input-box {
-            width: 100%;
-            padding: 16px 18px;
-            border-radius: 16px;
-            border: 1.5px solid var(--border-color);
-            background-color: #fff;
-            font-size: 15px;
-            color: var(--text-main);
-            outline: none;
-            transition: all 0.3s;
-            margin-top: 4px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-        }
-
-        .input-box:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 4px rgba(92, 29, 26, 0.08);
-        }
-
-        .error-msg {
-            font-size: 12px;
-            color: #b33939;
-            margin-top: -12px;
-            display: none;
-            font-weight: 600;
-        }
-
-        /* Tombol Pilihan di Screen 1 */
-        .button-group {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            position: relative;
-            min-height: 115px; /* Ruang gerak tombol kabur */
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #6b2420 0%, #4a1715 100%);
-            color: #fff;
-            border: none;
-            width: 100%;
-            padding: 16px;
-            border-radius: 16px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-            box-shadow: 0 6px 16px rgba(92, 29, 26, 0.25);
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #7c2b27 0%, #5c1d1a 100%);
-            transform: translateY(-1px);
-            box-shadow: 0 8px 20px rgba(92, 29, 26, 0.35);
-        }
-
-        /* Tombol "Moh Ah Gamau" yang bisa kabur-kaburan */
-        .btn-runaway {
-            background-color: transparent;
-            color: var(--accent-color);
-            border: 1.5px solid var(--border-color);
-            width: 100%;
-            padding: 14px;
-            border-radius: 16px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: not-allowed;
-            text-align: center;
-            transition: transform 0.15s ease-out;
-            position: relative;
-        }
-
-        .btn-secondary {
-            background-color: transparent;
-            color: var(--accent-color);
-            border: 1.5px solid var(--border-color);
-            width: 100%;
-            padding: 14px;
-            border-radius: 16px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.2s;
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--accent-color);
-            background-color: rgba(92, 29, 26, 0.04);
-        }
-
-        /* Carousel Galeri Foto */
-        .gallery-card {
-            background: #fff;
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-        }
-
-        .photo-container {
-            width: 100%;
-            height: 200px;
-            background-color: #d1c7bc;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .photo-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.4s ease;
-        }
-
-        .photo-caption-box {
-            padding: 16px;
-        }
-
-        .photo-caption-box h3 {
-            font-size: 16px;
-            margin-bottom: 4px;
-            color: var(--text-main);
-        }
-
-        .carousel-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 8px;
-        }
-
-        .carousel-btn {
-            background: #fff;
-            border: 1px solid var(--border-color);
-            padding: 8px 14px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            color: var(--text-main);
-            transition: all 0.2s;
-        }
-
-        .carousel-btn:hover {
-            background: var(--accent-color);
-            color: #fff;
-            border-color: var(--accent-color);
-        }
-
-        .indicator-dots {
-            font-size: 12px;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-
-        /* Pilihan Emosi / Perasaan */
-        .emotion-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 4px;
-        }
-
-        .emotion-btn {
-            background: #fff;
-            border: 1.5px solid var(--border-color);
-            padding: 13px 12px;
-            border-radius: 14px;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-main);
-            cursor: pointer;
-            text-align: left;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.01);
-        }
-
-        .emotion-btn:hover {
-            border-color: var(--accent-color);
-            background-color: #f7efe6;
-            transform: translateY(-1px);
-        }
-
-        /* Surat / Letter Box */
-        .letter-box {
-            background: #fff;
-            border: 1.5px solid var(--border-color);
-            padding: 18px;
-            border-radius: 18px;
-            font-size: 13.5px;
-            line-height: 1.75;
-            color: var(--text-main);
-            max-height: 190px;
-            overflow-y: auto;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.01);
-        }
-
-        .footer-note {
-            font-size: 11px;
-            text-align: center;
-            color: var(--text-muted);
-            margin-top: 10px;
-            line-height: 1.4;
-        }
-    </style>
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
 </head>
 <body>
 
-    <!-- Ornamen Latar Belakang yang Ramai & Estetik -->
-    <div class="bg-icon icon-1">⚖️</div>
-    <div class="bg-icon icon-2">📚</div>
-    <div class="bg-icon icon-3">📜</div>
-    <div class="bg-icon icon-4">🔨</div>
-    <div class="bg-icon icon-5">⚖️</div>
-    <div class="bg-icon icon-6">📖</div>
+<!-- ===== AMPLOP ===== -->
+<main id="amplop" class="stage on">
+  <div class="envelope" id="envelope">
+    <div class="env-back"></div>
+    <div class="env-letter"></div>
+    <div class="env-front"></div>
+    <div class="env-flap"></div>
+    <div class="stamp" aria-hidden="true">🐢</div>
+    <div class="label">
+      <small>Untuk:</small>
+      <input id="nama" type="text" maxlength="24" placeholder="tulis namamu" autocomplete="off" aria-label="Nama kamu">
+    </div>
+    <button class="seal" id="seal" aria-label="Buka amplop">K</button>
+  </div>
+  <p class="err" id="err" role="alert"></p>
+  <p class="hint">Ada kartu dari anak-anak KKPH UHB buat kamu. Tulis namamu di label, lalu pencet segel merahnya.</p>
+</main>
 
-    <div class="phone-container">
-        <div class="card-watermark">⚖️</div>
-        
-        <!-- SCREEN 1: Landing & Input Nama -->
-        <div id="screen-1" class="screen active">
-            <div style="display: flex; flex-direction: column; gap: 14px;">
-                <div class="top-nav">⚖️ KKPH UNIVERSITAS HARAPAN BANGSA • 2026</div>
-                <p class="subtitle" style="font-weight: 700; color: var(--accent-color); letter-spacing: 0.5px;">A LITTLE LETTER FOR YOU</p>
-                <h1 class="title">Dear Muda-Mudi Justitia.</h1>
-                <p class="subtitle">
-                    "Sebelum memulai perjalanan panjang di dunia hukum, mari berhenti sebentar dan mendengarkan isi hati."
-                </p>
-                <p class="subtitle">
-                    Hai! Kami ingin mengenalmu sedikit lebih dekat. Ketik nama atau panggilan kesayanganmu di bawah ya:
-                </p>
-                <input type="text" id="userName" class="input-box" placeholder="Contoh:dzainan,hannan,bahar" oninput="hideError()">
-                <div id="errorMsg" class="error-msg">⚠️ Ketik namamu dulu ya sebelum lanjut!</div>
-            </div>
-
-            <div class="button-group">
-                <button class="btn-primary" onclick="validateAndNext()">🔥 Reddy 1000%</button>
-                <!-- Tombol kabur-kaburan -->
-                <button id="runawayBtn" class="btn-runaway" onmouseover="moveButton()" onclick="alert('Eitss, gak bisa dipencet! Harus pilih Reddy 1000% dong! 😜')">moh ah gamau 🤪</button>
-            </div>
-
-            <div class="footer-note">Komunitas Kajian dan Penulisan Hukum<br>Ruang kecil untuk bertumbuh bersama.</div>
-        </div>
-
-        <!-- SCREEN 2: Galeri / Dokumentasi Interaktif KKPH (Memuat kegiatan1.jpeg - kegiatan8.jpeg) -->
-        <div id="screen-2" class="screen">
-            <div style="display: flex; flex-direction: column; gap: 12px;">
-                <button class="back-btn" onclick="goToScreen(1)">← Kembali</button>
-                <div class="top-nav">KENALAN DENGAN KKPH</div>
-                <h2 style="font-size: 22px;">Di balik setiap perjalanan...</h2>
-                <p class="subtitle" style="font-size: 13px;">...ada orang-orang yang belajar, berdiskusi, menulis, dan tumbuh bersama.</p>
-                
-                <div class="gallery-card">
-                    <div class="photo-container">
-                        <img id="galleryImg" src="kegiatan1.jpeg" alt="Dokumentasi Kegiatan KKPH">
-                    </div>
-                    <div class="photo-caption-box">
-                        <h3 id="galleryTitle">Momen Kebersamaan</h3>
-                        <p id="galleryDesc" class="subtitle" style="font-size: 12px;">Suasana hangat saat berkumpul dan berbagi cerita bersama.</p>
-                    </div>
-                </div>
-
-                <div class="carousel-controls">
-                    <button class="carousel-btn" onclick="prevPhoto()">← Sebelumnya</button>
-                    <span id="photoIndicator" class="indicator-dots">1 dari 8</span>
-                    <button class="carousel-btn" onclick="nextPhoto()">Selanjutnya →</button>
-                </div>
-            </div>
-            <button class="btn-primary" onclick="goToScreen(3)">→ Lanjut ke Pertanyaan</button>
-            <div class="footer-note" style="margin-top: 0;">Geser cerita • Dokumentasi kegiatan KKPH UHB</div>
-        </div>
-
-        <!-- SCREEN 3: Check-in Perasaan -->
-        <div id="screen-3" class="screen">
-            <div style="display: flex; flex-direction: column; gap: 12px;">
-                <button class="back-btn" onclick="goToScreen(2)">← Kembali</button>
-                <div class="top-nav">A MOMENT FOR YOU</div>
-                <h2 id="greetingEmotion" style="font-size: 22px;">Dear nama, bagaimana perasaanmu hari ini?</h2>
-                <p class="subtitle" style="font-size: 13px;">Jawab sejujur-jujurnya. Pilih yang paling menggambarkan keadaanmu sekarang.</p>
-                
-                <div class="emotion-grid">
-                    <button class="emotion-btn" onclick="selectEmotion('Aku sedang bahagia')">🌻 Bahagia</button>
-                    <button class="emotion-btn" onclick="selectEmotion('Aku baik-baik saja')">🌤️ Baik-baik saja</button>
-                    <button class="emotion-btn" onclick="selectEmotion('Aku sedang berproses')">🌱 Berproses</button>
-                    <button class="emotion-btn" onclick="selectEmotion('Hari ini cukup berat')">🌧️ Cukup berat</button>
-                    <button class="emotion-btn" onclick="selectEmotion('Aku sedang tidak baik-baik saja')">🥀 Kurang baik</button>
-                    <button class="emotion-btn" onclick="selectEmotion('Aku cuma ingin istirahat')">☕ Ingin istirahat</button>
-                </div>
-            </div>
-            <div class="footer-note">Tidak ada jawaban yang salah. Terima kasih sudah jujur pada dirimu sendiri.</div>
-        </div>
-
-        <!-- SCREEN 4: Surat & Kata Penyemangat -->
-        <div id="screen-4" class="screen">
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-                <button class="back-btn" onclick="goToScreen(3)">← Pilih Ulang Perasaan</button>
-                <div class="top-nav">A LETTER FROM KKPH</div>
-                <h2 id="letterTitle" style="font-size: 20px;">Untukmu, nama.</h2>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <span id="selectedEmotionBadge" style="background:#f0e6de; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight:600; color:var(--accent-color);">🌤️ Baik-baik saja</span>
-                </div>
-                
-                <div class="letter-box">
-                    <p><strong>Dear <span class="nameDisplay">nama</span>,</strong></p><br>
-                    <p id="letterContentText">Mungkin hari ini tidak terlalu istimewa, dan itu tidak apa-apa. Hari kuliah yang biasa pun tetap berharga. Semoga kamu bisa menikmati hal-hal kecil yang sering luput diperhatikan di kampus.</p><br>
-                    <p>Semoga setelah membaca surat kecil ini, langkah kakimu di Fakultas Hukum terasa sedikit lebih ringan.</p><br>
-                    <p><strong>— Dari KKPH Universitas Harapan Bangsa, untukmu. ⚖️</strong></p>
-                </div>
-                
-                <div style="background: #f7eee5; padding: 12px; border-radius: 14px; font-size: 13px; color: var(--text-main); text-align: center; border: 1px solid var(--border-color);">
-                    <span id="encouragementText">"Nama, pelan-pelan saja. Tidak semua hal harus selesai hari ini."</span>
-                </div>
-            </div>
-            
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-                <button class="btn-primary" onclick="randomEncouragement()" style="padding: 12px; font-size: 13.5px;">✨ Berikan aku satu semangat lagi</button>
-                <button class="btn-secondary" onclick="goToScreen(1)" style="padding: 10px; font-size: 13px;">↺ Mulai dari awal</button>
-            </div>
-        </div>
-
+<!-- ===== KARTU ===== -->
+<main id="kartu" class="stage">
+  <div class="card-wrap">
+    <div class="cover" id="cover" role="button" tabindex="0" aria-label="Buka kartu">
+      <div class="fig" aria-hidden="true">📎</div>
+      <h1 id="sampulNama">Halo!</h1>
+      <p>Kamu sudah baca berapa pasal hari ini? Istirahat dulu, ada yang nitip salam.</p>
+      <span class="tap">buka kartunya</span>
     </div>
 
-    <script>
-        let userName = "";
-        let currentEmotion = "Aku baik-baik saja";
+    <section class="inside">
+      <span class="tape a"></span><span class="tape b"></span>
+      <h2 class="judul" id="judulDalam">Dari kami semua</h2>
+      <p class="kecil">Foto-foto ini dari kegiatan KKPH. Pencet Lanjut buat lihat yang lain.</p>
 
-        // Efek tombol "moh ah gamau" lari-lari saat kursor mendekat
-        function moveButton() {
-            const btn = document.getElementById('runawayBtn');
-            const randomX = (Math.random() - 0.5) * 160; 
-            const randomY = (Math.random() - 0.5) * 60;  
-            btn.style.transform = `translate(${randomX}px, ${randomY}px)`;
-        }
+      <figure class="foto" id="foto">
+        <span class="tape"></span>
+        <img id="fotoImg" alt="" src="kegiatan1.jpeg">
+        <figcaption id="fotoCap"></figcaption>
+      </figure>
+      <div class="nav">
+        <button id="prev" aria-label="Foto sebelumnya">Balik</button>
+        <span class="kecil" id="hitung">1 dari 8</span>
+        <button id="next" aria-label="Foto berikutnya">Lanjut</button>
+      </div>
 
-        // Validasi input nama kosong
-        function validateAndNext() {
-            const input = document.getElementById('userName').value.trim();
-            const errorMsg = document.getElementById('errorMsg');
-            
-            if (!input) {
-                errorMsg.style.display = 'block';
-                document.getElementById('userName').style.borderColor = '#b33939';
-                return;
-            }
-            
-            userName = input;
-            goToScreen(2);
-        }
+      <h3 class="judul" style="margin-top:22px">Hari ini kamu lagi gimana?</h3>
+      <div class="chips" id="chips" role="group" aria-label="Pilih suasana hati"></div>
 
-        function hideError() {
-            document.getElementById('errorMsg').style.display = 'none';
-            document.getElementById('userName').style.borderColor = 'var(--border-color)';
-        }
+      <div class="kertas" id="kertas" aria-live="polite">
+        <p id="isiSurat">Pilih dulu salah satu di atas, nanti surat ini terisi.</p>
+        <p class="ttd" id="ttd"></p>
+      </div>
 
-        // Data 8 Foto Dokumentasi (kegiatan1.jpeg sampai kegiatan8.jpeg)
-        const galleryData = [
-            {
-                img: "kegiatan1.jpeg",
-                title: "Momen Kebersamaan",
-                desc: "Suasana hangat saat berkumpul dan berbagi cerita bersama."
-            },
-            {
-                img: "kegiatan2.jpeg",
-                title: "Kekompakan Tim",
-                desc: "Dokumentasi kebersamaan dalam balutan seragam yang rapi."
-            },
-            {
-                img: "kegiatan3.jpeg",
-                title: "Sesi Berharga",
-                desc: "Mengabadikan momen seru di sela-sela kegiatan."
-            },
-            {
-                img: "kegiatan4.jpeg",
-                title: "Acara Resmi",
-                desc: "Berdiri bersama dalam balutan acara formal yang berkesan."
-            },
-            {
-                img: "kegiatan5.jpeg",
-                title: "Formasi Lengkap",
-                desc: "Kebersamaan seluruh anggota dalam satu frame."
-            },
-            {
-                img: "kegiatan6.jpeg",
-                title: "Suasana Outdoor",
-                desc: "Berfoto bersama di tempat kegiatan yang asri."
-            },
-            {
-                img: "kegiatan7.jpeg",
-                title: "Malam Keakraban",
-                desc: "Keseruan acara malam yang penuh kehangatan."
-            },
-            {
-                img: "kegiatan8.jpeg",
-                title: "Kenangan Indah",
-                desc: "Satu dari sekian banyak memori manis yang terekam."
-            }
-        ];
-        
-        let currentPhotoIdx = 0;
+      <div class="kupon" id="kupon" hidden>
+        <small>Kupon buat kamu, berlaku 1x</small>
+        <b id="kuponIsi"></b>
+      </div>
 
-        function updateGallery() {
-            const data = galleryData[currentPhotoIdx];
-            document.getElementById('galleryImg').src = data.img;
-            document.getElementById('galleryTitle').innerText = data.title;
-            document.getElementById('galleryDesc').innerText = data.desc;
-            document.getElementById('photoIndicator').innerText = `${currentPhotoIdx + 1} dari ${galleryData.length}`;
-        }
+      <div class="stiker" id="stiker" role="group" aria-label="Pilih stiker, lalu pencet kertas untuk menempel"></div>
+      <p class="kecil" style="margin-top:6px">Pilih stiker, lalu pencet kertas surat buat menempelnya.</p>
 
-        function nextPhoto() {
-            currentPhotoIdx = (currentPhotoIdx + 1) % galleryData.length;
-            updateGallery();
-        }
+      <div class="aksi">
+        <button class="tombol" id="lain">Surat lain</button>
+        <button class="tombol polos" id="ulang">Tutup kartu</button>
+      </div>
+    </section>
+  </div>
+</main>
 
-        function prevPhoto() {
-            currentPhotoIdx = (currentPhotoIdx - 1 + galleryData.length) % galleryData.length;
-            updateGallery();
-        }
+<script>
+(function(){
+  var $ = function(id){return document.getElementById(id)};
+  var nama = "";
 
-        // Database Isi Surat berdasarkan Kategori Emosi
-        const letterContents = {
-            'Aku sedang bahagia': "Wah, mendengar kamu sedang bahagia ikut membuat kami ikut tersenyum lebar! Pertahankan energi positif ini, sebarkan kebaikan ke sekitarmu, dan nikmati setiap detik indah hari ini. Kamu hebat karena mampu menciptakan kebahagiaanmu sendiri!",
-            'Aku baik-baik saja': "Mungkin hari ini berjalan biasa saja, dan itu tidak apa-apa. Hari kuliah yang tenang dan stabil tetap sangat berharga. Semoga kamu bisa menikmati hal-hal kecil yang sering luput diperhatikan di kampus.",
-            'Aku sedang berproses': "Setiap langkah kecil, setinggi apapun rintangannya, adalah bagian dari proses pendewasaanmu di dunia hukum. Jangan lelah untuk terus belajar dan bertumbuh. Kami bangga melihat semangat konsisten yang ada dalam dirimu.",
-            'Hari ini cukup berat': "Hari yang berat bukan berarti kamu gagal. Tarik napas dalam-dalam, lepaskan beban pundakmu perlahan, dan ingat bahwa kamu sudah berjuang sekuat tenaga hari ini. Izinkan dirimu untuk beristirahat sejenak.",
-            'Aku sedang tidak baik-baik saja': "Tidak apa-apa jika hari ini terasa melelahkan dan membuatmu ingin menyerah sejenak. Kamu tidak harus selalu kuat di setiap waktu. Ingatlah bahwa ada keluarga besar KKPH yang siap mendengarkan dan mendukungmu kapanpun.",
-            'Aku cuma ingin istirahat': "Rehatlah sejenak. Dunia dan tumpukan tugas hukum tidak akan lari ke mana-mana. Tubuh dan pikiranmu juga butuh ruang tenang untuk bernapas. Matikan gawai sebentar dan nikmati waktu tenangmu hari ini, ya."
-        };
+  /* ---------- data ---------- */
+  var fotoList = [
+    ["kegiatan1.jpeg","Kumpul-kumpul"],
+    ["kegiatan2.jpeg","Seragam kompak"],
+    ["kegiatan3.jpeg","Diskusi sampai lupa waktu"],
+    ["kegiatan4.jpeg","Acara resmi, tetap senyum"],
+    ["kegiatan5.jpeg","Semua masuk frame"],
+    ["kegiatan6.jpeg","Di luar ruangan"],
+    ["kegiatan7.jpeg","Malam keakraban"],
+    ["kegiatan8.jpeg","Yang ini favorit"]
+  ];
 
-        // Database Kata Penyemangat spesifik berdasarkan Kategori Emosi
-        const encouragementBank = {
-            'Aku sedang bahagia': [
-                "Bagikan senyumanmu hari ini, karena energi baikmu menular ke banyak orang!",
-                "Teruslah bersinar dan nikmati hari yang indah ini sepenuhnya, ya!",
-                "Kebahagiaanmu hari ini adalah hasil dari usahamu yang luar biasa."
-            ],
-            'Aku baik-baik saja': [
-                "Pelan-pelan saja, tidak semua hal harus selesai dalam hari pertama.",
-                "Langkah kecil yang kamu ambil setiap hari tetap membawamu maju ke depan.",
-                "Nikmati ketenangan hari ini dengan secangkir hal baik."
-            ],
-            'Aku sedang berproses': [
-                "Proses tidak pernah memgkhianati hasil. Teruslah melangkah maju!",
-                "Jadikan setiap tantangan sebagai batu loncatan untuk menjadi praktisi hukum yang hebat.",
-                "Kamu sedang membentuk versi terbaik dari dirimu sendiri."
-            ],
-            'Hari ini cukup berat': [
-                "Kamu sudah melewati hari yang melelahkan ini dengan sangat hebat.",
-                "Badai pasti berlalu, besok matahari akan bersinar lebih hangat untukmu.",
-                "Istirahatlah sebentar, besok kita hadapi lagi dengan senyuman baru."
-            ],
-            'Aku sedang tidak baik-baik saja': [
-                "Peluk jauh dari kami. Kamu tidak sendirian menghadapi ini semua.",
-                "Menangis atau merasa lelah itu manusiawi, jangan dipendam sendirian ya.",
-                "Setiap senior dan teman di KKPH siap menjadi tempatmu bertukar cerita."
-            ],
-            'Aku cuma ingin istirahat': [
-                "Tidurlah yang nyenyak, biarkan ragamu memulihkan energinya kembali.",
-                "Rehat sejenak bukan berarti menyerah, tapi mengisi ulang tenaga untuk melangkah lagi.",
-                "Nikmati waktu santaimu hari ini tanpa beban pikiran tugas."
-            ]
-        };
+  var mood = {
+    senang:{label:"🌻 senang",
+      surat:[
+        "Wah, kabar bagus. Kami ikut senang bacanya. Simpan mood ini baik-baik, siapa tahu besok dipinjam sama temanmu yang lagi butuh.",
+        "Kalau hari ini enak, syukuri aja. Traktir dirimu es teh manis, kamu berhak."
+      ],
+      kupon:"Boleh pamer kabar baik ke 3 orang"},
+    biasa:{label:"🌤️ biasa saja",
+      surat:[
+        "Hari yang biasa saja juga hari yang lumayan. Nggak semua hari harus seru, yang penting kamu sudah sampai di sini.",
+        "Kadang datar itu enak, nggak ada drama. Semoga ada satu hal kecil yang bikin kamu senyum sore nanti."
+      ],
+      kupon:"Boleh ngemil tanpa alasan"},
+    sibuk:{label:"📚 tugas menumpuk",
+      surat:[
+        "Kami tahu, tugas hukum itu kadang datangnya berombongan. Kerjakan satu-satu ya. Yang paling dekat tenggatnya dulu, sisanya nanti.",
+        "Nggak perlu sempurna dulu. Draf jelek yang selesai lebih bagus daripada draf bagus yang belum ditulis."
+      ],
+      kupon:"Boleh istirahat 15 menit, tanpa buka HP soal tugas"},
+    capek:{label:"🌧️ capek banget",
+      surat:[
+        "Capek itu wajar, kamu bukan lemah. Minum air putih dulu, terus duduk sebentar. Sisanya bisa nunggu.",
+        "Hari ini berat ya. Nggak apa-apa kalau targetmu hari ini cuma bertahan sampai malam."
+      ],
+      kupon:"Boleh tidur siang tanpa merasa bersalah"},
+    sedih:{label:"🥀 lagi nggak baik",
+      surat:[
+        "Makasih sudah jujur soal ini. Kamu nggak perlu kelihatan kuat di depan kami. Kalau mau cerita, cari salah satu dari kami, nggak usah nunggu punya alasan yang bagus.",
+        "Kalau rasanya sudah terlalu berat buat dipegang sendirian, ajak bicara teman dekat, keluarga, atau konselor kampus. Itu bukan tanda kamu gagal."
+      ],
+      kupon:"Boleh minta ditemani ngobrol, kapan saja"},
+    rehat:{label:"☕ mau rehat",
+      surat:[
+        "Rehat dulu. Pasal-pasalnya nggak akan ke mana-mana, dan tenggat yang belum lewat masih bisa ditunggu.",
+        "Taruh HP, ambil minum hangat, lihat keluar jendela sebentar. Itu juga bagian dari belajar."
+      ],
+      kupon:"Boleh menghilang dari grup 1 jam"}
+  };
+  var stikerList = ["⭐","🍓","🐢","💛","📎","🌸"];
 
-        function goToScreen(screenNumber) {
-            if (screenNumber === 3) {
-                document.getElementById('greetingEmotion').innerText = `Dear ${userName}, bagaimana perasaanmu hari ini?`;
-            }
-            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
-            document.getElementById(`screen-${screenNumber}`).classList.add('active');
-        }
+  /* ---------- amplop ---------- */
+  function bukaAmplop(){
+    var v = $("nama").value.trim();
+    if(!v){
+      $("err").textContent = "Namanya belum diisi, nanti kartunya nggak tahu ini buat siapa.";
+      var e = $("envelope"); e.classList.remove("geter"); void e.offsetWidth; e.classList.add("geter");
+      $("nama").focus(); return;
+    }
+    nama = v; $("err").textContent = "";
+    $("envelope").classList.add("open");
+    setTimeout(function(){ $("envelope").classList.add("gone"); },900);
+    setTimeout(function(){
+      $("amplop").classList.remove("on");
+      $("kartu").classList.add("on");
+      $("sampulNama").textContent = "Halo, " + nama + "!";
+      $("judulDalam").textContent = "Buat " + nama + ", dari kami semua";
+      window.scrollTo(0,0);
+      $("cover").focus();
+    },1700);
+  }
+  $("seal").addEventListener("click",bukaAmplop);
+  $("nama").addEventListener("keydown",function(e){ if(e.key==="Enter") bukaAmplop(); });
+  $("nama").addEventListener("input",function(){ $("err").textContent=""; });
 
-        function selectEmotion(emotion) {
-            currentEmotion = emotion;
-            document.getElementById('letterTitle').innerText = `Untukmu, ${userName}.`;
-            document.getElementById('selectedEmotionBadge').innerText = emotion;
-            
-            // Ubah teks isi surat berdasarkan emosi yang dipilih
-            document.getElementById('letterContentText').innerText = letterContents[emotion] || letterContents['Aku baik-baik saja'];
-            
-            document.querySelectorAll('.nameDisplay').forEach(el => el.innerText = userName);
-            randomEncouragement();
-            goToScreen(4);
-        }
+  /* ---------- sampul ---------- */
+  function bukaSampul(){ $("cover").classList.add("terbuka"); }
+  $("cover").addEventListener("click",bukaSampul);
+  $("cover").addEventListener("keydown",function(e){
+    if(e.key==="Enter"||e.key===" "){ e.preventDefault(); bukaSampul(); }
+  });
 
-        function randomEncouragement() {
-            const listEncouragement = encouragementBank[currentEmotion] || encouragementBank['Aku baik-baik saja'];
-            const randomIndex = Math.floor(Math.random() * listEncouragement.length);
-            document.getElementById('encouragementText').innerText = `"${userName}, ${listEncouragement[randomIndex]}"`;
-        }
-    </script>
+  /* ---------- foto ---------- */
+  var idx = 0;
+  function placeholder(n){
+    var svg = "<svg xmlns='http://www.w3.org/2000/svg' width='400' height='210'>" +
+      "<rect width='100%' height='100%' fill='#e9e3d3'/>" +
+      "<text x='50%' y='50%' text-anchor='middle' font-family='sans-serif' font-size='16' fill='#8a7f66'>" +
+      "kegiatan" + n + ".jpeg belum ada di folder</text></svg>";
+    return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+  }
+  $("fotoImg").addEventListener("error",function(){
+    var s = placeholder(idx+1);
+    if(this.src !== s) this.src = s;
+  });
+  function tampilFoto(){
+    var f = fotoList[idx];
+    $("foto").classList.add("ganti");
+    setTimeout(function(){
+      $("fotoImg").src = f[0];
+      $("fotoImg").alt = f[1];
+      $("fotoCap").textContent = f[1];
+      $("hitung").textContent = (idx+1) + " dari " + fotoList.length;
+      $("foto").classList.remove("ganti");
+    },150);
+  }
+  $("next").addEventListener("click",function(){ idx=(idx+1)%fotoList.length; tampilFoto(); });
+  $("prev").addEventListener("click",function(){ idx=(idx-1+fotoList.length)%fotoList.length; tampilFoto(); });
+  $("fotoCap").textContent = fotoList[0][1];
+
+  /* ---------- suasana hati & surat ---------- */
+  var moodAktif = null, suratKe = 0;
+  Object.keys(mood).forEach(function(k){
+    var b = document.createElement("button");
+    b.className = "chip"; b.textContent = mood[k].label;
+    b.setAttribute("aria-pressed","false"); b.dataset.k = k;
+    b.addEventListener("click",function(){ pilihMood(k); });
+    $("chips").appendChild(b);
+  });
+
+  function pilihMood(k){
+    moodAktif = k; suratKe = 0;
+    document.querySelectorAll(".chip").forEach(function(c){
+      c.setAttribute("aria-pressed", c.dataset.k===k ? "true":"false");
+    });
+    tulisSurat();
+  }
+  function tulisSurat(){
+    if(!moodAktif){ $("isiSurat").textContent = "Pilih dulu salah satu suasana di atas."; return; }
+    var m = mood[moodAktif];
+    $("isiSurat").textContent = nama + ", " + m.surat[suratKe % m.surat.length];
+    $("ttd").textContent = "peluk dari KKPH UHB";
+    $("kuponIsi").textContent = m.kupon;
+    $("kupon").hidden = false;
+  }
+  $("lain").addEventListener("click",function(){
+    if(!moodAktif){ $("chips").querySelector(".chip").focus(); return; }
+    suratKe++; tulisSurat();
+  });
+
+  /* ---------- stiker ---------- */
+  var stikerAktif = null;
+  stikerList.forEach(function(s){
+    var b = document.createElement("button");
+    b.textContent = s; b.setAttribute("aria-pressed","false");
+    b.setAttribute("aria-label","Stiker " + s);
+    b.addEventListener("click",function(){
+      stikerAktif = (stikerAktif===s) ? null : s;
+      document.querySelectorAll(".stiker button").forEach(function(x){
+        x.setAttribute("aria-pressed", x.textContent===stikerAktif ? "true":"false");
+      });
+    });
+    $("stiker").appendChild(b);
+  });
+  $("kertas").addEventListener("click",function(e){
+    if(!stikerAktif) return;
+    var r = this.getBoundingClientRect();
+    var el = document.createElement("span");
+    el.className = "tempel"; el.textContent = stikerAktif;
+    el.style.left = (e.clientX - r.left) + "px";
+    el.style.top = (e.clientY - r.top) + "px";
+    el.style.setProperty("--r", (Math.random()*40-20).toFixed(0) + "deg");
+    this.appendChild(el);
+  });
+
+  /* ---------- tutup kartu ---------- */
+  $("ulang").addEventListener("click",function(){
+    document.querySelectorAll(".tempel").forEach(function(t){ t.remove(); });
+    $("cover").classList.remove("terbuka");
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+})();
+</script>
 </body>
 </html>
