@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Little Letter For You - KKPH UHB 2026</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --card-bg: #fffbf7;        
+            --text-main: #2b1713;       
+            --text-muted: #73594e;      
+            --accent-color: #5c1d1a;    
+            --accent-hover: #431412;    
+            --border-color: #e8ded3;    
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            /* Background gradasi mewah multi-warna */
+            background: radial-gradient(circle at 30% 30%, #4a1f1d 0%, #26110f 45%, #120706 100%);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 16px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Ornamen Background Ramai & Estetik (Timbangan, Buku, Gulungan, Palu) */
+        .bg-icon {
+            position: absolute;
+            opacity: 0.07;
+            user-select: none;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .icon-1 { top: 5%; left: 8%; font-size: 5rem; transform: rotate(-15deg); }
+        .icon-2 { top: 12%; right: 10%; font-size: 6rem; transform: rotate(20deg); }
+        .icon-3 { bottom: 8%; left: 10%; font-size: 7rem; transform: rotate(10deg); }
+        .icon-4 { bottom: 12%; right: 8%; font-size: 5.5rem; transform: rotate(-25deg); }
+        .icon-5 { top: 45%; left: 3%; font-size: 4rem; transform: rotate(45deg); }
+        .icon-6 { top: 50%; right: 4%; font-size: 4.5rem; transform: rotate(-30deg); }
+
+        /* Container menyerupai layar HP supaya estetik */
+        .phone-container {
+            width: 100%;
+            max-width: 412px;
+            background: var(--card-bg);
+            background-image: linear-gradient(to bottom, #fffbf7 0%, #f7f0e8 100%);
+            border-radius: 36px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            min-height: 780px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 32px 24px;
+        }
+
+        .card-watermark {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            font-size: 22px;
+            opacity: 0.25;
+            pointer-events: none;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--text-main);
+        }
+
+        .screen {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+            animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            flex-grow: 1;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .top-nav {
+            font-size: 11.5px;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 13px;
+            cursor: pointer;
+            text-align: left;
+            font-weight: 600;
+            transition: color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .back-btn:hover {
+            color: var(--accent-color);
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1.25;
+            color: var(--accent-color);
+        }
+
+        .subtitle {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-muted);
+        }
+
+        /* Input Form */
+        .input-box {
+            width: 100%;
+            padding: 16px 18px;
+            border-radius: 16px;
+            border: 1.5px solid var(--border-color);
+            background-color: #fff;
+            font-size: 15px;
+            color: var(--text-main);
+            outline: none;
+            transition: all 0.3s;
+            margin-top: 4px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+
+        .input-box:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px rgba(92, 29, 26, 0.08);
+        }
+
+        .error-msg {
+            font-size: 12px;
+            color: #b33939;
+            margin-top: -12px;
+            display: none;
+            font-weight: 600;
+        }
+
+        /* Tombol Pilihan di Screen 1 */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+            min-height: 115px; /* Ruang gerak tombol kabur */
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6b2420 0%, #4a1715 100%);
+            color: #fff;
+            border: none;
+            width: 100%;
+            padding: 16px;
+            border-radius: 16px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            box-shadow: 0 6px 16px rgba(92, 29, 26, 0.25);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #7c2b27 0%, #5c1d1a 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(92, 29, 26, 0.35);
+        }
+
+        /* Tombol "Moh Ah Gamau" yang bisa kabur-kaburan */
+        .btn-runaway {
+            background-color: transparent;
+            color: var(--accent-color);
+            border: 1.5px solid var(--border-color);
+            width: 100%;
+            padding: 14px;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: not-allowed;
+            text-align: center;
+            transition: transform 0.15s ease-out;
+            position: relative;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--accent-color);
+            border: 1.5px solid var(--border-color);
+            width: 100%;
+            padding: 14px;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-color);
+            background-color: rgba(92, 29, 26, 0.04);
+        }
+
+        /* Carousel Galeri Foto */
+        .gallery-card {
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+
+        .photo-container {
+            width: 100%;
+            height: 200px;
+            background-color: #d1c7bc;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .photo-caption-box {
+            padding: 16px;
+        }
+
+        .photo-caption-box h3 {
+            font-size: 16px;
+            margin-bottom: 4px;
+            color: var(--text-main);
+        }
+
+        .carousel-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .carousel-btn {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text-main);
+            transition: all 0.2s;
+        }
+
+        .carousel-btn:hover {
+            background: var(--accent-color);
+            color: #fff;
+            border-color: var(--accent-color);
+        }
+
+        .indicator-dots {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Pilihan Emosi / Perasaan */
+        .emotion-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .emotion-btn {
+            background: #fff;
+            border: 1.5px solid var(--border-color);
+            padding: 13px 12px;
+            border-radius: 14px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-main);
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.01);
+        }
+
+        .emotion-btn:hover {
+            border-color: var(--accent-color);
+            background-color: #f7efe6;
+            transform: translateY(-1px);
+        }
+
+        /* Surat / Letter Box */
+        .letter-box {
+            background: #fff;
+            border: 1.5px solid var(--border-color);
+            padding: 18px;
+            border-radius: 18px;
+            font-size: 13.5px;
+            line-height: 1.75;
+            color: var(--text-main);
+            max-height: 190px;
+            overflow-y: auto;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.01);
+        }
+
+        .footer-note {
+            font-size: 11px;
+            text-align: center;
+            color: var(--text-muted);
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ornamen Latar Belakang yang Ramai & Estetik -->
+    <div class="bg-icon icon-1">⚖️</div>
+    <div class="bg-icon icon-2">📚</div>
+    <div class="bg-icon icon-3">📜</div>
+    <div class="bg-icon icon-4">🔨</div>
+    <div class="bg-icon icon-5">⚖️</div>
+    <div class="bg-icon icon-6">📖</div>
+
+    <div class="phone-container">
+        <div class="card-watermark">⚖️</div>
+        
+        <!-- SCREEN 1: Landing & Input Nama -->
+        <div id="screen-1" class="screen active">
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+                <div class="top-nav">⚖️ KKPH UNIVERSITAS HARAPAN BANGSA • 2026</div>
+                <p class="subtitle" style="font-weight: 700; color: var(--accent-color); letter-spacing: 0.5px;">A LITTLE LETTER FOR YOU</p>
+                <h1 class="title">Dear Muda-Mudi Justitia.</h1>
+                <p class="subtitle">
+                    "Sebelum memulai perjalanan panjang di dunia hukum, mari berhenti sebentar dan mendengarkan isi hati."
+                </p>
+                <p class="subtitle">
+                    Hai! Kami ingin mengenalmu sedikit lebih dekat. Ketik nama atau panggilan kesayanganmu di bawah ya:
+                </p>
+                <input type="text" id="userName" class="input-box" placeholder="Contoh:dzainan,hannan,bahar" oninput="hideError()">
+                <div id="errorMsg" class="error-msg">⚠️ Ketik namamu dulu ya sebelum lanjut!</div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-primary" onclick="validateAndNext()">🔥 Reddy 1000%</button>
+                <!-- Tombol kabur-kaburan -->
+                <button id="runawayBtn" class="btn-runaway" onmouseover="moveButton()" onclick="alert('Eitss, gak bisa dipencet! Harus pilih Reddy 1000% dong! 😜')">moh ah gamau 🤪</button>
+            </div>
+
+            <div class="footer-note">Komunitas Kajian dan Penulisan Hukum<br>Ruang kecil untuk bertumbuh bersama.</div>
+        </div>
+
+        <!-- SCREEN 2: Galeri / Dokumentasi Interaktif KKPH (Memuat kegiatan1.jpeg - kegiatan8.jpeg) -->
+        <div id="screen-2" class="screen">
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <button class="back-btn" onclick="goToScreen(1)">← Kembali</button>
+                <div class="top-nav">KENALAN DENGAN KKPH</div>
+                <h2 style="font-size: 22px;">Di balik setiap perjalanan...</h2>
+                <p class="subtitle" style="font-size: 13px;">...ada orang-orang yang belajar, berdiskusi, menulis, dan tumbuh bersama.</p>
+                
+                <div class="gallery-card">
+                    <div class="photo-container">
+                        <img id="galleryImg" src="kegiatan1.jpeg" alt="Dokumentasi Kegiatan KKPH">
+                    </div>
+                    <div class="photo-caption-box">
+                        <h3 id="galleryTitle">Momen Kebersamaan</h3>
+                        <p id="galleryDesc" class="subtitle" style="font-size: 12px;">Suasana hangat saat berkumpul dan berbagi cerita bersama.</p>
+                    </div>
+                </div>
+
+                <div class="carousel-controls">
+                    <button class="carousel-btn" onclick="prevPhoto()">← Sebelumnya</button>
+                    <span id="photoIndicator" class="indicator-dots">1 dari 8</span>
+                    <button class="carousel-btn" onclick="nextPhoto()">Selanjutnya →</button>
+                </div>
+            </div>
+            <button class="btn-primary" onclick="goToScreen(3)">→ Lanjut ke Pertanyaan</button>
+            <div class="footer-note" style="margin-top: 0;">Geser cerita • Dokumentasi kegiatan KKPH UHB</div>
+        </div>
+
+        <!-- SCREEN 3: Check-in Perasaan -->
+        <div id="screen-3" class="screen">
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <button class="back-btn" onclick="goToScreen(2)">← Kembali</button>
+                <div class="top-nav">A MOMENT FOR YOU</div>
+                <h2 id="greetingEmotion" style="font-size: 22px;">Dear nama, bagaimana perasaanmu hari ini?</h2>
+                <p class="subtitle" style="font-size: 13px;">Jawab sejujur-jujurnya. Pilih yang paling menggambarkan keadaanmu sekarang.</p>
+                
+                <div class="emotion-grid">
+                    <button class="emotion-btn" onclick="selectEmotion('Aku sedang bahagia')">🌻 Bahagia</button>
+                    <button class="emotion-btn" onclick="selectEmotion('Aku baik-baik saja')">🌤️ Baik-baik saja</button>
+                    <button class="emotion-btn" onclick="selectEmotion('Aku sedang berproses')">🌱 Berproses</button>
+                    <button class="emotion-btn" onclick="selectEmotion('Hari ini cukup berat')">🌧️ Cukup berat</button>
+                    <button class="emotion-btn" onclick="selectEmotion('Aku sedang tidak baik-baik saja')">🥀 Kurang baik</button>
+                    <button class="emotion-btn" onclick="selectEmotion('Aku cuma ingin istirahat')">☕ Ingin istirahat</button>
+                </div>
+            </div>
+            <div class="footer-note">Tidak ada jawaban yang salah. Terima kasih sudah jujur pada dirimu sendiri.</div>
+        </div>
+
+        <!-- SCREEN 4: Surat & Kata Penyemangat -->
+        <div id="screen-4" class="screen">
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button class="back-btn" onclick="goToScreen(3)">← Pilih Ulang Perasaan</button>
+                <div class="top-nav">A LETTER FROM KKPH</div>
+                <h2 id="letterTitle" style="font-size: 20px;">Untukmu, nama.</h2>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span id="selectedEmotionBadge" style="background:#f0e6de; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight:600; color:var(--accent-color);">🌤️ Baik-baik saja</span>
+                </div>
+                
+                <div class="letter-box">
+                    <p><strong>Dear <span class="nameDisplay">nama</span>,</strong></p><br>
+                    <p id="letterContentText">Mungkin hari ini tidak terlalu istimewa, dan itu tidak apa-apa. Hari kuliah yang biasa pun tetap berharga. Semoga kamu bisa menikmati hal-hal kecil yang sering luput diperhatikan di kampus.</p><br>
+                    <p>Semoga setelah membaca surat kecil ini, langkah kakimu di Fakultas Hukum terasa sedikit lebih ringan.</p><br>
+                    <p><strong>— Dari KKPH Universitas Harapan Bangsa, untukmu. ⚖️</strong></p>
+                </div>
+                
+                <div style="background: #f7eee5; padding: 12px; border-radius: 14px; font-size: 13px; color: var(--text-main); text-align: center; border: 1px solid var(--border-color);">
+                    <span id="encouragementText">"Nama, pelan-pelan saja. Tidak semua hal harus selesai hari ini."</span>
+                </div>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button class="btn-primary" onclick="randomEncouragement()" style="padding: 12px; font-size: 13.5px;">✨ Berikan aku satu semangat lagi</button>
+                <button class="btn-secondary" onclick="goToScreen(1)" style="padding: 10px; font-size: 13px;">↺ Mulai dari awal</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let userName = "";
+        let currentEmotion = "Aku baik-baik saja";
+
+        // Efek tombol "moh ah gamau" lari-lari saat kursor mendekat
+        function moveButton() {
+            const btn = document.getElementById('runawayBtn');
+            const randomX = (Math.random() - 0.5) * 160; 
+            const randomY = (Math.random() - 0.5) * 60;  
+            btn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        }
+
+        // Validasi input nama kosong
+        function validateAndNext() {
+            const input = document.getElementById('userName').value.trim();
+            const errorMsg = document.getElementById('errorMsg');
+            
+            if (!input) {
+                errorMsg.style.display = 'block';
+                document.getElementById('userName').style.borderColor = '#b33939';
+                return;
+            }
+            
+            userName = input;
+            goToScreen(2);
+        }
+
+        function hideError() {
+            document.getElementById('errorMsg').style.display = 'none';
+            document.getElementById('userName').style.borderColor = 'var(--border-color)';
+        }
+
+        // Data 8 Foto Dokumentasi (kegiatan1.jpeg sampai kegiatan8.jpeg)
+        const galleryData = [
+            {
+                img: "kegiatan1.jpeg",
+                title: "Momen Kebersamaan",
+                desc: "Suasana hangat saat berkumpul dan berbagi cerita bersama."
+            },
+            {
+                img: "kegiatan2.jpeg",
+                title: "Kekompakan Tim",
+                desc: "Dokumentasi kebersamaan dalam balutan seragam yang rapi."
+            },
+            {
+                img: "kegiatan3.jpeg",
+                title: "Sesi Berharga",
+                desc: "Mengabadikan momen seru di sela-sela kegiatan."
+            },
+            {
+                img: "kegiatan4.jpeg",
+                title: "Acara Resmi",
+                desc: "Berdiri bersama dalam balutan acara formal yang berkesan."
+            },
+            {
+                img: "kegiatan5.jpeg",
+                title: "Formasi Lengkap",
+                desc: "Kebersamaan seluruh anggota dalam satu frame."
+            },
+            {
+                img: "kegiatan6.jpeg",
+                title: "Suasana Outdoor",
+                desc: "Berfoto bersama di tempat kegiatan yang asri."
+            },
+            {
+                img: "kegiatan7.jpeg",
+                title: "Malam Keakraban",
+                desc: "Keseruan acara malam yang penuh kehangatan."
+            },
+            {
+                img: "kegiatan8.jpeg",
+                title: "Kenangan Indah",
+                desc: "Satu dari sekian banyak memori manis yang terekam."
+            }
+        ];
+        
+        let currentPhotoIdx = 0;
+
+        function updateGallery() {
+            const data = galleryData[currentPhotoIdx];
+            document.getElementById('galleryImg').src = data.img;
+            document.getElementById('galleryTitle').innerText = data.title;
+            document.getElementById('galleryDesc').innerText = data.desc;
+            document.getElementById('photoIndicator').innerText = `${currentPhotoIdx + 1} dari ${galleryData.length}`;
+        }
+
+        function nextPhoto() {
+            currentPhotoIdx = (currentPhotoIdx + 1) % galleryData.length;
+            updateGallery();
+        }
+
+        function prevPhoto() {
+            currentPhotoIdx = (currentPhotoIdx - 1 + galleryData.length) % galleryData.length;
+            updateGallery();
+        }
+
+        // Database Isi Surat berdasarkan Kategori Emosi
+        const letterContents = {
+            'Aku sedang bahagia': "Wah, mendengar kamu sedang bahagia ikut membuat kami ikut tersenyum lebar! Pertahankan energi positif ini, sebarkan kebaikan ke sekitarmu, dan nikmati setiap detik indah hari ini. Kamu hebat karena mampu menciptakan kebahagiaanmu sendiri!",
+            'Aku baik-baik saja': "Mungkin hari ini berjalan biasa saja, dan itu tidak apa-apa. Hari kuliah yang tenang dan stabil tetap sangat berharga. Semoga kamu bisa menikmati hal-hal kecil yang sering luput diperhatikan di kampus.",
+            'Aku sedang berproses': "Setiap langkah kecil, setinggi apapun rintangannya, adalah bagian dari proses pendewasaanmu di dunia hukum. Jangan lelah untuk terus belajar dan bertumbuh. Kami bangga melihat semangat konsisten yang ada dalam dirimu.",
+            'Hari ini cukup berat': "Hari yang berat bukan berarti kamu gagal. Tarik napas dalam-dalam, lepaskan beban pundakmu perlahan, dan ingat bahwa kamu sudah berjuang sekuat tenaga hari ini. Izinkan dirimu untuk beristirahat sejenak.",
+            'Aku sedang tidak baik-baik saja': "Tidak apa-apa jika hari ini terasa melelahkan dan membuatmu ingin menyerah sejenak. Kamu tidak harus selalu kuat di setiap waktu. Ingatlah bahwa ada keluarga besar KKPH yang siap mendengarkan dan mendukungmu kapanpun.",
+            'Aku cuma ingin istirahat': "Rehatlah sejenak. Dunia dan tumpukan tugas hukum tidak akan lari ke mana-mana. Tubuh dan pikiranmu juga butuh ruang tenang untuk bernapas. Matikan gawai sebentar dan nikmati waktu tenangmu hari ini, ya."
+        };
+
+        // Database Kata Penyemangat spesifik berdasarkan Kategori Emosi
+        const encouragementBank = {
+            'Aku sedang bahagia': [
+                "Bagikan senyumanmu hari ini, karena energi baikmu menular ke banyak orang!",
+                "Teruslah bersinar dan nikmati hari yang indah ini sepenuhnya, ya!",
+                "Kebahagiaanmu hari ini adalah hasil dari usahamu yang luar biasa."
+            ],
+            'Aku baik-baik saja': [
+                "Pelan-pelan saja, tidak semua hal harus selesai dalam hari pertama.",
+                "Langkah kecil yang kamu ambil setiap hari tetap membawamu maju ke depan.",
+                "Nikmati ketenangan hari ini dengan secangkir hal baik."
+            ],
+            'Aku sedang berproses': [
+                "Proses tidak pernah memgkhianati hasil. Teruslah melangkah maju!",
+                "Jadikan setiap tantangan sebagai batu loncatan untuk menjadi praktisi hukum yang hebat.",
+                "Kamu sedang membentuk versi terbaik dari dirimu sendiri."
+            ],
+            'Hari ini cukup berat': [
+                "Kamu sudah melewati hari yang melelahkan ini dengan sangat hebat.",
+                "Badai pasti berlalu, besok matahari akan bersinar lebih hangat untukmu.",
+                "Istirahatlah sebentar, besok kita hadapi lagi dengan senyuman baru."
+            ],
+            'Aku sedang tidak baik-baik saja': [
+                "Peluk jauh dari kami. Kamu tidak sendirian menghadapi ini semua.",
+                "Menangis atau merasa lelah itu manusiawi, jangan dipendam sendirian ya.",
+                "Setiap senior dan teman di KKPH siap menjadi tempatmu bertukar cerita."
+            ],
+            'Aku cuma ingin istirahat': [
+                "Tidurlah yang nyenyak, biarkan ragamu memulihkan energinya kembali.",
+                "Rehat sejenak bukan berarti menyerah, tapi mengisi ulang tenaga untuk melangkah lagi.",
+                "Nikmati waktu santaimu hari ini tanpa beban pikiran tugas."
+            ]
+        };
+
+        function goToScreen(screenNumber) {
+            if (screenNumber === 3) {
+                document.getElementById('greetingEmotion').innerText = `Dear ${userName}, bagaimana perasaanmu hari ini?`;
+            }
+            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+            document.getElementById(`screen-${screenNumber}`).classList.add('active');
+        }
+
+        function selectEmotion(emotion) {
+            currentEmotion = emotion;
+            document.getElementById('letterTitle').innerText = `Untukmu, ${userName}.`;
+            document.getElementById('selectedEmotionBadge').innerText = emotion;
+            
+            // Ubah teks isi surat berdasarkan emosi yang dipilih
+            document.getElementById('letterContentText').innerText = letterContents[emotion] || letterContents['Aku baik-baik saja'];
+            
+            document.querySelectorAll('.nameDisplay').forEach(el => el.innerText = userName);
+            randomEncouragement();
+            goToScreen(4);
+        }
+
+        function randomEncouragement() {
+            const listEncouragement = encouragementBank[currentEmotion] || encouragementBank['Aku baik-baik saja'];
+            const randomIndex = Math.floor(Math.random() * listEncouragement.length);
+            document.getElementById('encouragementText').innerText = `"${userName}, ${listEncouragement[randomIndex]}"`;
+        }
+    </script>
+</body>
+</html>
